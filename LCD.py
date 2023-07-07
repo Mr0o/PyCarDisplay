@@ -104,24 +104,26 @@ loops = 0
 hours = 0
 minutes = 0
 
+MILEAGE_LOG_FILE = './mileage_log.csv'
+
 # check if the mileage log file exists
 try:
-    with open('./mileage_log.csv', mode='r') as mileage_log:
+    with open(MILEAGE_LOG_FILE, mode='r') as mileage_log:
         mileage_log.close()
     print("Opening mileage log file...")
 except FileNotFoundError:
     print("Creating mileage log file...")
-    with open('./mileage_log.csv', mode='w') as mileage_log:
+    with open(MILEAGE_LOG_FILE, mode='w') as mileage_log:
         mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         mileage_writer.writerow(['Date', 'Mileage', 'Elapsed Time']) # write the column headers to the csv file
 
 
 
 # open the mileage log csv file to write to
-with open('./mileage_log.csv', mode='a') as mileage_log:
+with open(MILEAGE_LOG_FILE, mode='a') as mileage_log:
     # write a new row with the current date and -1 values for mileage and time
     mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    mileage_writer.writerow([datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"), -1, -1])
+    mileage_writer.writerow([datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"), "NULL", "NULL"])
 
 # clear the displays
 lcdSmall.clear()
@@ -271,7 +273,7 @@ while(1): #loop forever
             if miles_elapsed > 0: # only update the mileage log if the miles elapsed is greater than 0
                 logSaved = True
                 # edit the last row of the csv file to update the mileage and time elapsed with the current values
-                with open('./mileage_log.csv', mode='r') as mileage_log:
+                with open(MILEAGE_LOG_FILE, mode='r') as mileage_log:
                     mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                     mileage_list = list(mileage_reader)
                     mileage_list[-1][1] = round(miles_elapsed)
@@ -279,7 +281,7 @@ while(1): #loop forever
                     mileage_log.close()
 
                 # write the updated list to the csv file
-                with open('./mileage_log.csv', mode='w') as mileage_log:
+                with open(MILEAGE_LOG_FILE, mode='w') as mileage_log:
                     mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                     for row in mileage_list:
                         mileage_writer.writerow(row)
