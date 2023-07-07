@@ -258,8 +258,16 @@ while(1): #loop forever
             with open('./mileage_log.csv', mode='r') as mileage_log:
                 mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 mileage_list = list(mileage_reader)
-                mileage_list[-1][1] = str(round(miles_elapsed))
-                mileage_list[-1][2] = str(time_elapsed)
+                mileage_list[-1][1] = round(miles_elapsed)
+                mileage_list[-1][2] = time_elapsed
+                mileage_log.close()
+
+            # write the updated list to the csv file
+            with open('./mileage_log.csv', mode='w') as mileage_log:
+                mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                for row in mileage_list:
+                    mileage_writer.writerow(row)
+                mileage_log.close()
         
         ### print to LCD ###
         lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
@@ -273,7 +281,6 @@ while(1): #loop forever
         space = ""
         if round(mpg_display) < 10: space = " " # this fixes a spacing issue and makes it look nicer
         lcdBig.text("MPG: " +space+ str(mpg_display) + "  GPH: " + str(round(gph, 2)), 1)
-        lcdBig.text("D: " + str(datetime.date.today().strftime("%m/%d/%Y")), 2)
         lcdBig.text("Time: " + time_elapsed, 3)
         if logSaved: # for debugging ###REMOVE THIS###
             lcdBig.text("Miles: " + str(round(miles_elapsed)) + "***", 4)
