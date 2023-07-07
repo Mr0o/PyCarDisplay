@@ -276,7 +276,7 @@ while(1): #loop forever
         lcdBig.text("D: " + str(datetime.date.today().strftime("%m/%d/%Y")), 2)
         lcdBig.text("Time: " + time_elapsed, 3)
         if logSaved: # for debugging ###REMOVE THIS###
-            lcdBig.text("Miles: " + str(round(miles_elapsed) + "***"), 4)
+            lcdBig.text("Miles: " + str(round(miles_elapsed)) + "***", 4)
         else:
             lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
         #lcdBig.text("Miles: " + str(round(miles_elapsed)) + "  " + str(round(mph)) + "MPH:", 4) # for debugging ###REMOVE THIS###
