@@ -106,7 +106,7 @@ with open('./mileage_log.csv', mode='a') as mileage_log:
 
     # write a new row with the current date and -1 values for mileage and time
     mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    mileage_writer.writerow([datetime.date.today().strftime("%m/%d/%Y/%H:%M:%S"), -1, -1])
+    mileage_writer.writerow([datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), -1, -1])
 
 # clear the displays
 lcdSmall.clear()
