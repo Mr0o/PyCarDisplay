@@ -2,10 +2,17 @@ import datetime
 from time import sleep
 import csv
 
-try:
+import sys
+# debug flag, pass -d or --debug to the script to enable debug mode
+if "-d" in sys.argv or "--debug" in sys.argv:
+    debug = True
+else:
+    debug = False
+
+if debug == False:
     from rpi_lcd import LCD
     import obd
-except ImportError:
+else:
     # if the rpi_lcd module is not installed, then use the test module for non-Raspberry Pi systems
     from rpi_lcd_test import LCD
     import obd_test as obd
