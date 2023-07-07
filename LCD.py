@@ -283,7 +283,7 @@ while(1): #loop forever
         lcdBig.text("MPG: " +space+ str(mpg_display) + "  GPH: " + str(round(gph, 2)), 1)
         lcdBig.text("Time: " + time_elapsed, 3)
         if logSaved: # for debugging ###REMOVE THIS###
-            lcdBig.text("Miles: " + str(round(miles_elapsed)) + "***", 4)
+            lcdBig.text("Miles: " + str(round(miles_elapsed)) + "   ***", 4)
         else:
             lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
         #lcdBig.text("Miles: " + str(round(miles_elapsed)) + "  " + str(round(mph)) + "MPH:", 4) # for debugging ###REMOVE THIS###
