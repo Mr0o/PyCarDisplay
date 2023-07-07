@@ -2,8 +2,13 @@ import datetime
 from time import sleep
 import csv
 
-from rpi_lcd import LCD
-import obd
+try:
+    from rpi_lcd import LCD
+    import obd
+except ImportError:
+    # if the rpi_lcd module is not installed, then use the test module for non-Raspberry Pi systems
+    from rpi_lcd_test import LCD
+    import obd_test as obd
 
 ### USER DEFINED VARIABLE ###
 MPG_CALIBRATE = 0.000 # this is to be a percentage that can be used to adjust the mpg value to be more accurate (set to 0 to ignore)
