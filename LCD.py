@@ -104,11 +104,21 @@ loops = 0
 hours = 0
 minutes = 0
 
-# open the mileage log csv file to write to (create it if it does not exist)
-with open('./mileage_log.csv', mode='a') as mileage_log:
-    mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    mileage_writer.writerow(['Date', 'Mileage', 'Elapsed Time']) # write the column headers to the csv file
+# check if the mileage log file exists
+try:
+    with open('./mileage_log.csv', mode='r') as mileage_log:
+        mileage_log.close()
+    print("Opening mileage log file...")
+except FileNotFoundError:
+    print("Creating mileage log file...")
+    with open('./mileage_log.csv', mode='w') as mileage_log:
+        mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        mileage_writer.writerow(['Date', 'Mileage', 'Elapsed Time']) # write the column headers to the csv file
 
+
+
+# open the mileage log csv file to write to
+with open('./mileage_log.csv', mode='a') as mileage_log:
     # write a new row with the current date and -1 values for mileage and time
     mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     mileage_writer.writerow([datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), -1, -1])
@@ -258,21 +268,22 @@ while(1): #loop forever
         logSaved = False
         if loops > 10: # only update the mileage log every 10 loops (prevents excessive writes to the SD card)
             loops = 0 # reset the loop counter
-            logSaved = True
-            # edit the last row of the csv file to update the mileage and time elapsed with the current values
-            with open('./mileage_log.csv', mode='r') as mileage_log:
-                mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                mileage_list = list(mileage_reader)
-                mileage_list[-1][1] = round(miles_elapsed)
-                mileage_list[-1][2] = time_elapsed
-                mileage_log.close()
+            if miles_elapsed > 0: # only update the mileage log if the miles elapsed is greater than 0
+                logSaved = True
+                # edit the last row of the csv file to update the mileage and time elapsed with the current values
+                with open('./mileage_log.csv', mode='r') as mileage_log:
+                    mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    mileage_list = list(mileage_reader)
+                    mileage_list[-1][1] = round(miles_elapsed)
+                    mileage_list[-1][2] = time_elapsed
+                    mileage_log.close()
 
-            # write the updated list to the csv file
-            with open('./mileage_log.csv', mode='w') as mileage_log:
-                mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                for row in mileage_list:
-                    mileage_writer.writerow(row)
-                mileage_log.close()
+                # write the updated list to the csv file
+                with open('./mileage_log.csv', mode='w') as mileage_log:
+                    mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    for row in mileage_list:
+                        mileage_writer.writerow(row)
+                    mileage_log.close()
         
         ### print to LCD ###
         lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
@@ -287,10 +298,7 @@ while(1): #loop forever
         if round(mpg_display) < 10: space = " " # this fixes a spacing issue and makes it look nicer
         lcdBig.text("MPG: " +space+ str(mpg_display) + "  GPH: " + str(round(gph, 2)), 1)
         lcdBig.text("Time: " + time_elapsed, 3)
-        if logSaved: # for debugging ###REMOVE THIS###
-            lcdBig.text("Miles: " + str(round(miles_elapsed)) + "   ***", 4)
-        else:
-            lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
+        lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
         #lcdBig.text("Miles: " + str(round(miles_elapsed)) + "  " + str(round(mph)) + "MPH:", 4) # for debugging ###REMOVE THIS###
         
         
