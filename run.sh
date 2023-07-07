@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd home/pi/Desktop
+cd /home/pi/Desktop/
 python3 LCD.py
