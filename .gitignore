@@ -1,1 +1,8 @@
 mileage_log.csv
+
+# ignore pycache
+__pycache__/
+.pyc
+
+# ignore vscode folder
+.vscode/
