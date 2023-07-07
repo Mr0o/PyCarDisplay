@@ -104,7 +104,7 @@ loops = 0
 hours = 0
 minutes = 0
 
-MILEAGE_LOG_FILE = './mileage_log.csv'
+MILEAGE_LOG_FILE = 'mileage_log.csv'
 
 # check if the mileage log file exists
 try:
