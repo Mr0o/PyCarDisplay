@@ -1,17 +1,13 @@
+import datetime
+from time import sleep
+import csv
+
 from rpi_lcd import LCD
 import obd
-
-import pickle # used for saving and loading data
-
-from time import sleep
 
 ### USER DEFINED VARIABLE ###
 MPG_CALIBRATE = 0.000 # this is to be a percentage that can be used to adjust the mpg value to be more accurate (set to 0 to ignore)
 MPH_CALIBRATE = 0.075 # this is to be a percentage that can be used to adjust the mph value to be more accurate (set to 0 to ignore)
-
-### load mpg data and calculate average mpg ###
-path_to_pickle = '/home/pi/Desktop/mpg.pkl'
-
 
 # connect to LCD displays, if it fails to connect, try again until it is succesfull
 failed = True
@@ -42,7 +38,7 @@ def connectOBD():
             lcdSmall.text("Connecting..." + str(trys) , 1) # so let the user know whats happening
         if trys == 15: # more than 15 attempts, likely never going to connect
             lcdBig.text("No connection!", 1) # let the user know something is wrong
-            lcdBig.text("Check odb...", 2) # offer a solution
+            lcdBig.text("Check obd...", 2) # offer a solution
         sleep (0.8)
     
     sleep(0.5)
@@ -97,35 +93,20 @@ except Exception as e:
     
 
 # declaring variables with values of 0
-avg_mpg = 0.0
 mpg = 0
 mph = 0
 loops = 0
+hours = 0
+minutes = 0
 
-mpgData = []
-try:
-    # load average mpg data from file
-    with open(path_to_pickle, 'rb') as f:
-        mpgData = pickle.load(f)
+# open the mileage log csv file to write to (create it if it does not exist)
+with open('mileage_log.csv', mode='a') as mileage_log:
+    mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    mileage_writer.writerow(['Date', 'Mileage', 'Elapsed Time']) # write the column headers to the csv file
 
-    # calculate the average mpg
-    mpg_sum = 0
-    for i in mpgData:
-        mpg_sum = mpg_sum + i
-        avg_mpg =  mpg_sum / (len(mpgData) + 0.0001) # add a small number to prevent divide by zero
-except Exception: # if the file does not exist, generate a new file
-    mpgData = []
-    print("Creating new file: 'mpg.pkl'")
-    lcdSmall.clear()
-    lcdBig.text("Creating new file", 1)
-    lcdBig.text("'mpg.pkl'  ", 2)
-    
-    # generate a new pickle file with a blank array
-    with open(path_to_pickle, 'wb') as f:
-        pickle.dump(mpgData, f)
-                
-    sleep(3) # gives enough time for the user to see the message, otherwise it would just print and then instantly be cleared
-
+    # write a new row with the current date and -1 values for mileage and time
+    mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    mileage_writer.writerow([datetime.date.today().strftime("%m/%d/%Y/%H:%M:%S"), -1, -1])
 
 # clear the displays
 lcdSmall.clear()
@@ -207,7 +188,11 @@ while(1): #loop forever
                 minutes = seconds // 60
             time_elapsed = "%d:%02d" % (hours, minutes)
         else:
-            time_elapsed = str(0)
+            if seconds:
+                if minutes > 0 or hours > 0:
+                    time_elapsed = "%d:%02d" % (hours, minutes)
+            else:
+                time_elapsed = "-:--"
 
         ######## get mpg #########
         maf = connection.query(obd.commands.MAF) # send the command, and parse the response
@@ -263,34 +248,18 @@ while(1): #loop forever
         
         if mpg > 99: # max mpg is 99
             mpg = 99
-            
-        # average mpg
-        if seconds > 1: # ignore mpg data if the car hasnt started yet (run time less than 1 second)
-            if gph >= 0.01: 
-                mpgData.append(mpg)
-            else: # if there is no fuel being used (gph < 0.01) add 50% to the average mpg to increase the overall average
-                  # this is to reflect the fuel economy of coasting in gear (uses no fuel, which means higher mpg)
-                mpgData.append(avg_mpg + avg_mpg * 0.50) 
-            ## find the average mpg ##
-            mpg_sum = 0
-            for i in mpgData:
-                mpg_sum = mpg_sum + i
-            avg_mpg =  mpg_sum / len(mpgData)
-                
-        # average mpg data should be limited to prevent an excessive amount of data being saved
-        ## the mpg array will begin at a minimum of 25,000 and reset each time its size reaches 100,000
-        if len(mpgData) > 100000: # limit the size of the mpg array to 100,000
-            while(len(mpgData) > 25000): # set the size of the mpg array to 25,000
-                mpgData.pop(0) # pop the first value until the size of the array is 25,000
         
-        ### save average mpg data to file, only after every 100 loops ### 
-        loops = loops + 1
-        if loops > 100:
-            loops = 0
-            # save the data
-            with open(path_to_pickle, 'wb') as f:
-                pickle.dump(mpgData, f)
-            
+        loops += 1 # increment the loop counter
+        logSaved = False
+        if loops > 10: # only update the mileage log every 10 loops (prevents excessive writes to the SD card)
+            loops = 0 # reset the loop counter
+            logSaved = True
+            # edit the last row of the csv file to update the mileage and time elapsed with the current values
+            with open('mileage_log.csv', mode='r') as mileage_log:
+                mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                mileage_list = list(mileage_reader)
+                mileage_list[-1][1] = str(round(miles_elapsed))
+                mileage_list[-1][2] = str(time_elapsed)
         
         ### print to LCD ###
         lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
@@ -300,15 +269,16 @@ while(1): #loop forever
         mpg_display = round(mpg)
         if mpg == 99:
             mpg_display = 99 
-        
-        avg_display = round((avg_mpg - (avg_mpg*MPG_CALIBRATE)), 1)
-        
+
         space = ""
         if round(mpg_display) < 10: space = " " # this fixes a spacing issue and makes it look nicer
         lcdBig.text("MPG: " +space+ str(mpg_display) + "  GPH: " + str(round(gph, 2)), 1)
-        #lcdBig.text("Avg MPG: " + str(avg_display), 2)
+        lcdBig.text("D: " + str(datetime.date.today().strftime("%m/%d/%Y")), 2)
         lcdBig.text("Time: " + time_elapsed, 3)
-        lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
+        if logSaved: # for debugging ###REMOVE THIS###
+            lcdBig.text("Miles: " + str(round(miles_elapsed) + "***"), 4)
+        else:
+            lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
         #lcdBig.text("Miles: " + str(round(miles_elapsed)) + "  " + str(round(mph)) + "MPH:", 4) # for debugging ###REMOVE THIS###
         
         
