@@ -100,7 +100,7 @@ hours = 0
 minutes = 0
 
 # open the mileage log csv file to write to (create it if it does not exist)
-with open('mileage_log.csv', mode='a') as mileage_log:
+with open('./mileage_log.csv', mode='a') as mileage_log:
     mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     mileage_writer.writerow(['Date', 'Mileage', 'Elapsed Time']) # write the column headers to the csv file
 
@@ -255,7 +255,7 @@ while(1): #loop forever
             loops = 0 # reset the loop counter
             logSaved = True
             # edit the last row of the csv file to update the mileage and time elapsed with the current values
-            with open('mileage_log.csv', mode='r') as mileage_log:
+            with open('./mileage_log.csv', mode='r') as mileage_log:
                 mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 mileage_list = list(mileage_reader)
                 mileage_list[-1][1] = str(round(miles_elapsed))
