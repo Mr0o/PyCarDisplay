@@ -277,7 +277,7 @@ while(1): #loop forever
         logSaved = False
         if loops > 10: # only update the mileage log every 10 loops (prevents excessive writes to the SD card)
             loops = 0 # reset the loop counter
-            if miles_elapsed > 0: # only update the mileage log if the miles elapsed is greater than 0
+            if miles_elapsed > 0 and time_elapsed != "-:--" and time_elapsed != "0:00":
                 logSaved = True
                 # edit the last row of the csv file to update the mileage and time elapsed with the current values
                 with open(MILEAGE_LOG_FILE, mode='r') as mileage_log:
