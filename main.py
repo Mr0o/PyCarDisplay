@@ -54,7 +54,7 @@ while(True):
                 update_log(miles_elapsed, time_elapsed) # update the mileage log file
             except Exception as e:
                 # something has gone wrong, likely corrupted mileage log file
-                # we will delete the old log file and create a new one
+                # we will backup the old log file and create a new one
                 print("ERROR: " + str(e))
                 print("Creating a new mileage log file...")
 
