@@ -128,7 +128,7 @@ def get_RUN_TIME(command: obd.Async):
     return time_elapsed
 
 
-def get_MPG_GPH_INSTANTANEOUS(command: obd.Async, pedal: int) -> tuple[float, float]:
+def get_MPG_GPH_INSTANTANEOUS(command: obd.Async, pedal: int):
     maf = command.query(obd.commands.MAF) # send the command, and parse the response
     kph = command.query(obd.commands.SPEED) # send the command, and parse the response
     rpm = command.query(obd.commands.RPM) # send the command, and parse the response
