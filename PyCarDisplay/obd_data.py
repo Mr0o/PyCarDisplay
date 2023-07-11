@@ -104,26 +104,30 @@ def get_RELATIVE_THROTTLE_POS(command: obd.Async):
 
 
 def get_RUN_TIME(command: obd.Async):
-    # run time
-    seconds = None
-    cmd = command.query(obd.commands.RUN_TIME) # send the command, and parse the response
-    if not cmd.is_null():
-        time_elapsed = cmd.value.magnitude
-        seconds = time_elapsed
-        hours = 0
-        minutes = 0
-        if seconds > 3600:
-            hours = seconds // 3600
-        if seconds > 60:
-            seconds %= 3600
-            minutes = seconds // 60
-        time_elapsed = "%d:%02d" % (hours, minutes)
-    else:
-        if seconds:
-            if minutes > 0 or hours > 0:
-                time_elapsed = "%d:%02d" % (hours, minutes)
+    try:
+        # run time
+        seconds = None
+        cmd = command.query(obd.commands.RUN_TIME) # send the command, and parse the response
+        if not cmd.is_null():
+            time_elapsed = cmd.value.magnitude
+            seconds = time_elapsed
+            hours = 0
+            minutes = 0
+            if seconds > 3600:
+                hours = seconds // 3600
+            if seconds > 60:
+                seconds %= 3600
+                minutes = seconds // 60
+            time_elapsed = "%d:%02d" % (hours, minutes)
         else:
-            time_elapsed = "-:--"
+            if seconds:
+                if minutes > 0 or hours > 0:
+                    time_elapsed = "%d:%02d" % (hours, minutes)
+            else:
+                time_elapsed = "-:--"
+    except:
+        time_elapsed = "-:--"
+        print ("ERROR: RUN_TIME value failed to parse")
 
     return time_elapsed
 
