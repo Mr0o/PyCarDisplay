@@ -1,4 +1,5 @@
 import datetime
+import os
 from time import sleep
 import csv
 
@@ -107,9 +108,10 @@ except Exception as e:
 # declaring variables with values of 0
 mpg = 0
 mph = 0
-loops = 0
 hours = 0
 minutes = 0
+seconds = 0
+previous_time_elapsed = "-:--"
 
 MILEAGE_LOG_FILE = 'mileage_log.csv'
 
@@ -218,6 +220,12 @@ while(1): #loop forever
             else:
                 time_elapsed = "-:--"
 
+        # check if the time elapsed has changed since the last loop
+        time_elapsed_changed = False
+        if time_elapsed != previous_time_elapsed:
+            time_elapsed_changed = True
+            previous_time_elapsed = time_elapsed
+
         ######## get mpg #########
         maf = connection.query(obd.commands.MAF) # send the command, and parse the response
         kph = connection.query(obd.commands.SPEED) # send the command, and parse the response
@@ -273,12 +281,10 @@ while(1): #loop forever
         if mpg > 99: # max mpg is 99
             mpg = 99
         
-        loops += 1 # increment the loop counter
         logSaved = False
-        if loops > 10: # only update the mileage log every 10 loops (prevents excessive writes to the SD card)
-            loops = 0 # reset the loop counter
-            if miles_elapsed > 0 and time_elapsed != "-:--" and time_elapsed != "0:00":
-                logSaved = True
+        if miles_elapsed > 0 and time_elapsed != "-:--" and time_elapsed != "0:00" and time_elapsed_changed == True:
+            logSaved = True
+            try:
                 # edit the last row of the csv file to update the mileage and time elapsed with the current values
                 with open(MILEAGE_LOG_FILE, mode='r') as mileage_log:
                     mileage_reader = csv.reader(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -293,6 +299,37 @@ while(1): #loop forever
                     for row in mileage_list:
                         mileage_writer.writerow(row)
                     mileage_log.close()
+            except Exception as e:
+                print("ERROR: " + str(e))
+                print("Creating a new mileage log file...")
+
+                lcdBig.clear()
+                lcdBig.text("ERROR: ", 1)
+                lcdBig.text(str(e), 2)
+
+                lcdSmall.clear()
+                lcdSmall.text("Creating a new", 1)
+                lcdSmall.text("log file...", 2)
+
+                # if the mileage log file is corrupted,delete the old and create a new one
+                
+                # delete the old file
+                try:
+                    os.remove(MILEAGE_LOG_FILE)
+                except Exception:
+                    print("ERROR: Failed to delete the mileage log file!")
+                    continue
+
+                with open(MILEAGE_LOG_FILE, mode='w') as mileage_log:
+                    mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    mileage_writer.writerow(['Date', 'Mileage', 'Elapsed Time']) # write the column headers to the csv file
+
+                    # write a new row with the current date and NULL values for mileage and time
+                    mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    mileage_writer.writerow([datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"), "NULL", "NULL"])
+                
+                sleep(2)
+
         
         ### print to LCD ###
         lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
