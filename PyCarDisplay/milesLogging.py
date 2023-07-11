@@ -40,12 +40,25 @@ def update_log(miles_elapsed: int, time_elapsed: str) -> None:
         mileage_log.close()
 
 
-def delete_log() -> None:
-    # delete the mileage log file
-    os.remove(MILEAGE_LOG_FILE)
+def rename_log() -> None:
+    # rename the old log file to keep as backup (if it is perhaps corrupted, but still has data contained within it)
+    # check if a log file already exists
+    # get files in current directory
+    files = os.listdir()
+    # check if the log file exists
+    if MILEAGE_LOG_FILE[:-4] + "(1)" not in files:
+        # if it is not found, rename the log file to include "(1)" at the end
+        os.rename(MILEAGE_LOG_FILE, MILEAGE_LOG_FILE[:-4] + "(1)")
+    else:
+        # get all the files containing .csv in the name
+        csv_files = [i for i in files if ".csv" in i]
+        # get the highest number in the list of files before the .csv extension
+        highest_number = max([int(i[-5]) for i in csv_files])
+        # rename the log file with +1 to the highest number
+        os.rename(MILEAGE_LOG_FILE, MILEAGE_LOG_FILE[:-5] + "(" + str(highest_number + 1) + ").csv")
 
 
 def create_new_log() -> None:
-    # delete the old log file and create a new one
-    delete_log()
+    # rename the old log file and create a new one
+    rename_log()
     init_log()
