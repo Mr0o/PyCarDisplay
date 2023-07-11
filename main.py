@@ -8,7 +8,6 @@ try:
 except Exception as e:
     LCD_Error_Msg(str(e))
     sleep(2)
-    
 
 LCD_Clear()
 
@@ -72,7 +71,7 @@ while(True):
                     print("ERROR: " + str(e))
                     LCD_Error_Msg(str(e))
                 
-                sleep(2)
+                sleep(8)
         
         ## Update the LCD ##
         LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed)
