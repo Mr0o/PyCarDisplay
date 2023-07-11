@@ -27,7 +27,10 @@ while(failed):
         print("ERROR: Failed to connect to the LCD Displays! Check the I2C connection!")
         sleep(1)
 
-def getTempGauge(t):
+def getTempGauge(t: int) -> str:
+    # check that the argument is an integer
+    if type(t) != int:
+        t = 125
     # create temperature bar guage
     temp_bar = ""
     if t < 125: #less than 125 degrees, consider it a cold engine
