@@ -55,6 +55,12 @@ def getTempGauge(t: int | float) -> str:
 
 def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed) -> str:
     ### print to LCD ###
+
+    # make sure engine temp is a float or int
+    if type(engine_temp) != float and type(engine_temp) != int:
+        # if it is not, set it to 130 (this will show up as "_______" on the LCD")
+        engine_temp = 130
+
     lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
     lcdSmall.text("Eng: " + getTempGauge(engine_temp), 2) 
 
