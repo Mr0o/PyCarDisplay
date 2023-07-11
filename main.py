@@ -37,6 +37,9 @@ while(True):
 
         # get the elapsed miles this trip
         miles_elapsed = dtc_miles - start_miles
+        # no negative miles
+        if miles_elapsed < 0:
+            miles_elapsed = 0
 
         ## get mpg ##
         mpg, gph = get_MPG_GPH_INSTANTANEOUS(connection, pedal)
