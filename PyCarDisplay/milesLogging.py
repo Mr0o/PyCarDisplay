@@ -42,20 +42,28 @@ def update_log(miles_elapsed: int, time_elapsed: str) -> None:
 
 def rename_log() -> None:
     # rename the old log file to keep as backup (if it is perhaps corrupted, but still has data contained within it)
-    # check if a log file already exists
     # get files in current directory
     files = os.listdir()
     # check if the log file exists
-    if MILEAGE_LOG_FILE[:-4] + "(1)" not in files:
-        # if it is not found, rename the log file to include "(1)" at the end
-        os.rename(MILEAGE_LOG_FILE, MILEAGE_LOG_FILE[:-4] + "(1)")
-    else:
-        # get all the files containing .csv in the name
-        csv_files = [i for i in files if ".csv" in i]
-        # get the highest number in the list of files before the .csv extension
-        highest_number = max([int(i[-5]) for i in csv_files])
+    # get all the files containing .csv in the name
+    csv_files = [i for i in files if ".csv" in i]
+    if len(csv_files) == 0:
+        print("ERROR: Cannot rename log file, no csv files found!")
+        return
+    if len(csv_files) == 1:
+        # if there are no csv files, rename the log file to include "(1)" at the end
+        os.rename(MILEAGE_LOG_FILE, MILEAGE_LOG_FILE[:-4] + "(1).csv")
+        return
+    print("Renaming the log file...")
+    # get the highest number in the list of files before the .csv extension
+    highest_number = max([int(i[-6]) for i in csv_files if i[-6].isdigit()])
+    if highest_number+1 < 10:
         # rename the log file with +1 to the highest number
-        os.rename(MILEAGE_LOG_FILE, MILEAGE_LOG_FILE[:-5] + "(" + str(highest_number + 1) + ").csv")
+        os.rename(MILEAGE_LOG_FILE, MILEAGE_LOG_FILE[:-4] + "(" + str(highest_number + 1) + ").csv")
+    if highest_number == 9:
+        # we have too many log file backups, so we will not rename the log file
+        print("WARNING: Maximum number of log files reached!")
+        return
 
 
 def create_new_log() -> None:
