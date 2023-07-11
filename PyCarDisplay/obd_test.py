@@ -1,6 +1,17 @@
 # implementation of the obd module with dummy functions
 # this is used for testing on a non-Raspberry Pi system
 
+import sys
+if "--disconnected" in sys.argv:
+    connected = False
+else:
+    connected = True
+
+if "--obd-null" in sys.argv:
+    obd_null = True
+else:
+    obd_null = False
+
 # commands
 class commandsList:
     def __init__(self) -> None:
@@ -39,12 +50,16 @@ class Async:
         pass
     
     def status(self) -> str:
-        return "Connected"
+        if connected:
+            return "Connected"
+        else:
+            return "Not Connected"
 
     def query(self, command):
         response = Response()
         
-        if self.status == "Not Connected":
+        # simulate a OBD2 connection with the car off
+        if obd_null:
             response.value.magnitude = 0
             response.isNull = True
             return response
