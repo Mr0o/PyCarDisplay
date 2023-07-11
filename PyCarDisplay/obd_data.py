@@ -105,6 +105,7 @@ def get_RELATIVE_THROTTLE_POS(command: obd.Async):
 
 def get_RUN_TIME(command: obd.Async):
     # run time
+    seconds = None
     cmd = command.query(obd.commands.RUN_TIME) # send the command, and parse the response
     if not cmd.is_null():
         time_elapsed = cmd.value.magnitude
