@@ -23,9 +23,10 @@ class valMagnitude:
 class Response:
     def __init__(self) -> None:
         self.value = valMagnitude()
+        self.isNull = False
 
     def is_null(self) -> bool:
-        return False
+        return self.isNull
 
 class Async:
     def __init__(self) -> None:
@@ -42,6 +43,12 @@ class Async:
 
     def query(self, command):
         response = Response()
+        
+        if self.status == "Not Connected":
+            response.value.magnitude = 0
+            response.isNull = True
+            return response
+
         # get the command value
         if command == commands.RPM:
             response.value.magnitude = 1500
