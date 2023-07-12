@@ -30,7 +30,7 @@ while(True):
 
         ### get obd data ###
         air_temp = get_AMBIANT_AIR_TEMP(connection)
-        engine_temp = get_AMBIANT_AIR_TEMP(connection)
+        engine_temp = get_COOLANT_TEMP(connection)
         pedal = get_RELATIVE_THROTTLE_POS(connection)
         dtc_miles = get_DISTANCE_SINCE_DTC_CLEAR(connection)
         time_elapsed = get_RUN_TIME(connection)
