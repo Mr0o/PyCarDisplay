@@ -10,6 +10,7 @@ def init_log() -> None:
         with open(MILEAGE_LOG_FILE, mode='r') as mileage_log:
             mileage_log.close()
         print("Opening mileage log file...")
+        clean_csv_files()
     except FileNotFoundError:
         print("Creating mileage log file...")
         with open(MILEAGE_LOG_FILE, mode='w') as mileage_log:
@@ -21,6 +22,45 @@ def init_log() -> None:
         # write a new row with the current date and -1 values for mileage and time
         mileage_writer = csv.writer(mileage_log, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         mileage_writer.writerow([datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"), "NULL", "NULL"])
+
+def clean_csv_files() -> None:
+    with open('combined.csv', mode='w') as combined_csv:
+        combined_writer = csv.writer(combined_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        combined_writer.writerow(['Date', 'Mileage', 'Elapsed Time'])
+
+        # get files in current directory
+        files = os.listdir()
+        # check if the log file exists
+        # get all the files containing .csv in the name
+        csv_files = [i for i in files if ".csv" in i]
+        if len(csv_files) == 0:
+            return
+        
+        # combine the csv files and remove NUL bytes
+        for csv_file in csv_files:
+            with open(csv_file, mode='r') as mileage_log:
+                # remove NUL bytes from the csv file upon reading it
+                mileage_reader = csv.reader((line.replace('\0','') for line in mileage_log), delimiter=",", quoting=csv.QUOTE_MINIMAL)
+                mileage_list = list(mileage_reader)
+                for row in mileage_list:
+                    # do not write the column headers to the combined csv file
+                    if row != ['Date', 'Mileage', 'Elapsed Time']:
+                        combined_writer.writerow(row)
+
+    # move all the old csv files to a backup folder
+    backup_folder = "backup"
+    if not os.path.exists(backup_folder):
+        os.makedirs(backup_folder)
+
+    for csv_file in csv_files:
+        # exclude the combined.csv file from being moved to the backup folder
+        if csv_file != "combined.csv":
+            os.rename(csv_file, backup_folder + "/" + csv_file)
+
+    # rename the combined csv file to the original csv file name
+    os.rename("combined.csv", MILEAGE_LOG_FILE)
+    
+    print("CSV log files cleaned")
 
 
 def update_log(miles_elapsed: int, time_elapsed: str) -> None:
