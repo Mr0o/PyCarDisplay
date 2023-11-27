@@ -1,5 +1,5 @@
 from time import sleep
-from PyCarDisplay.milesLogging import init_log, update_log, create_new_log
+from PyCarDisplay.milesLogging import init_log, update_log, clean_csv_files
 from PyCarDisplay.display import lcdBig, lcdSmall, LCD_Clear, LCD_Update, LCD_Error_Msg, LCD_Idle
 from PyCarDisplay.obd_data import *
 
@@ -60,23 +60,26 @@ while(True):
                 # something has gone wrong, likely corrupted mileage log file
                 # we will backup the old log file and create a new one
                 print("ERROR: " + str(e))
-                print("Creating a new mileage log file...")
+                print("Cleaning the csv files...")
 
                 lcdBig.clear()
                 lcdBig.text("ERROR: ", 1)
                 lcdBig.text(str(e), 2)
 
                 lcdSmall.clear()
-                lcdSmall.text("Creating a new", 1)
+                lcdSmall.text("Cleaning", 1)
                 lcdSmall.text("log file...", 2)
 
                 try:
-                    create_new_log()
+                    clean_csv_files()
                 except Exception as e:
                     print("ERROR: " + str(e))
                     LCD_Error_Msg(str(e))
                 
-                sleep(8)
+                sleep(5)
+
+                lcdBig.clear()
+                lcdSmall.clear()
         
         ## Update the LCD ##
         LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed)
