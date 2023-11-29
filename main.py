@@ -1,5 +1,5 @@
 from time import sleep
-from PyCarDisplay.milesLogging import init_log, update_log, clean_csv_files
+from PyCarDisplay.milesLogging import init_log, update_log, create_new_log, clean_csv_files
 from PyCarDisplay.display import lcdBig, lcdSmall, LCD_Clear, LCD_Update, LCD_Error_Msg, LCD_Idle
 from PyCarDisplay.obd_data import *
 
@@ -75,6 +75,10 @@ while(True):
                 except Exception as e:
                     print("ERROR: " + str(e))
                     LCD_Error_Msg(str(e))
+
+                    # Something is probably wrong with the current csv log file
+                    # So lets just create a new one (and backup the old one)
+                    create_new_log()
                 
                 sleep(5)
 
