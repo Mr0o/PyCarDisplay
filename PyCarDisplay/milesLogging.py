@@ -103,7 +103,7 @@ def rename_log() -> None:
     if highest_number == 9:
         # we have too many log file backups, so we will not rename the log file
         print("WARNING: Maximum number of log files reached!")
-        return
+        raise Exception("Max backup log files exceeded!")
 
 
 def create_new_log() -> None:
