@@ -53,6 +53,10 @@ Here is the list of data that is currently displayed:
     ```
     bash install.sh
     ```
+5. Reboot the Raspberry Pi to verify that it is working:
+    ```
+    sudo reboot
+    ```
 ## Set up PyCarDisplay (Manually)
 
 1. Open a terminal on the Raspberry Pi.
