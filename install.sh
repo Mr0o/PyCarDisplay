@@ -31,6 +31,7 @@ if ! command -v python3 >/dev/null 2>&1; then
 fi
 
 if [ ! -d "env" ]; then
+    echo "Creating Python virtual environment..."
     python3 -m venv env
 fi
 
@@ -51,4 +52,4 @@ STARTUP_LINE="bash \"$TARGET_DIR/run.sh\" &"
 BASHRC="$USER_HOME/.bashrc"
 grep -Fxq "$STARTUP_LINE" "$BASHRC" 2>/dev/null || echo "$STARTUP_LINE" >> "$BASHRC"
 
-echo "Installation complete. Reboot to test: sudo reboot"
+echo -e "\n\nInstallation complete. Please reboot your Raspberry Pi to start PyCarDisplay automatically."
