@@ -19,8 +19,7 @@ Here is the list of data that is currently displayed:
 
 ## Raspberry Pi Setup
 1. Install [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/) on your Raspberry Pi.
-2. Enable ```I2C``` in the Raspberry Pi configuration settings.
-3. Connect the two i2c LCD displays to the Raspberry Pi using the following connections:
+2. Connect the two i2c LCD displays to the Raspberry Pi using the following connections:
 
    - **LCD 1**:
      - VCC to 5V
@@ -57,6 +56,7 @@ Here is the list of data that is currently displayed:
     ```
     sudo reboot
     ```
+6. Done! Just make sure the LCDs are connected and the OBD2 cable is plugged in.
 ## Set up PyCarDisplay (Manually)
 
 1. Open a terminal on the Raspberry Pi.
