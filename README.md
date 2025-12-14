@@ -22,13 +22,13 @@ Here is the list of data that is currently displayed:
 2. Enable ```I2C``` in the Raspberry Pi configuration settings.
 3. Connect the two i2c LCD displays to the Raspberry Pi using the following connections:
 
-   - **LCD 1 (Top Display)**:
+   - **LCD 1**:
      - VCC to 5V
      - GND to GND
      - SDA to SDA (GPIO 2)
      - SCL to SCL (GPIO 3)
 
-   - **LCD 2 (Bottom Display)**:
+   - **LCD 2**:
      - VCC to 5V
      - GND to GND
      - SDA to SDA (GPIO 2)
