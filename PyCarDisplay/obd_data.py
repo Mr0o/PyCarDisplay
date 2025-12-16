@@ -1,6 +1,7 @@
 from time import sleep
 
 from PyCarDisplay.display import lcdBig, lcdSmall
+from PyCarDisplay.user_configs import MPG_CALIBRATE, MPH_CALIBRATE
 
 import sys
 # debug flag, pass -d or --debug to the script to enable debug mode
@@ -14,10 +15,6 @@ if debug == False:
 else:
     # if the obd module is not installed, then use the test module for non-Raspberry Pi systems
     import PyCarDisplay.obd_test as obd
-
-### USER DEFINED VARIABLE ###
-MPG_CALIBRATE = 0.000 # this is to be a percentage that can be used to adjust the mpg value to be more accurate (set to 0 to ignore)
-MPH_CALIBRATE = 0.075 # this is to be a percentage that can be used to adjust the mph value to be more accurate (set to 0 to ignore)
 
 def connectOBD():
     #connect, will keep trying to connect until it is succesfull
