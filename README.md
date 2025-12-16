@@ -33,7 +33,7 @@ Here is the list of data that is currently displayed:
      - SDA to SDA (GPIO 2)
      - SCL to SCL (GPIO 3)
 
-   > Note: Both displays share the same I2C bus, so ensure they have different I2C addresses. This may require changing the address of one of the displays using jumpers or solder pads on the display module. The addresses used in this project are `0x27` for the smaller 16x2 display and `0x26` for the larger 20x4 display.
+   > Note: Both displays share the same I2C bus, so ensure they have different I2C addresses. This may require changing the address of one of the displays using jumpers or solder pads on the display module. The default addresses used in this project are `0x27` for the smaller 16x2 display and `0x26` for the larger 20x4 display. Thses addresses can be changed in the `user_configs.py` file in the PyCarDisplay folder.
 
 ## Set up PyCarDisplay
 1. Open a terminal on the Raspberry Pi.
