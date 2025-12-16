@@ -70,6 +70,7 @@ def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elap
             space = " " # improves formatting
 
         lcdBig.text("MPG: " +space+ str(round(mpg_display)) + "  GPH: " + "{:.2f}".format(gph), 1)
+        lcdBig.text("                    ", 2)
         lcdBig.text("Time: " + time_elapsed, 3)
         lcdBig.text("Miles: " + str(round(miles_elapsed)), 4)
     
@@ -88,7 +89,7 @@ def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elap
         if round(lkm_display) < 10: 
             space = " " # improves formatting
         
-        lcdBig.text("L/100km: " +space+ str(round(lkm_display)) + " L/h: " + "{:.2f}".format(lph), 1)
+        lcdBig.text("L/100km: " +space+ str(round(lkm_display)) + "  L/h: " + "{:.2f}".format(lph), 1)
         lcdBig.text("                    ", 2)
         lcdBig.text("Time: " + time_elapsed, 3)
         lcdBig.text("Km: " + str(round(km_elapsed)), 4)
