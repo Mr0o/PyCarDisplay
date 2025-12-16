@@ -15,6 +15,8 @@ Here is the list of data that is currently displayed:
     - Miles traveled since start (Trip)
     - Time since engine start (Trip)
 
+> Metric units can be enabled in the `user_configs.py` file in the PyCarDisplay folder by setting the `USE_METRIC` variable to `True`.
+
 # How to Set Up (Instructions)
 
 ## Raspberry Pi Setup
