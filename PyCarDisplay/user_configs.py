@@ -1,8 +1,12 @@
+### LCD ADDRESSES ###
+LCD_SMALL_ADDR = 0x27 # I2C address of small LCD (16x2)
+LCD_BIG_ADDR   = 0x26 # I2C address of big LCD (20x4)
+
 # UNITS
 USE_METRIC = False
 # note: this will not apply to the values recorded in the log
 
-### USER DEFINED VARIABLE ###
+### USER DEFINED CALIBRATION OFFSET ###
 # adjustment goes like this: actual
 MPG_CALIBRATE = 0.000 # this is to be a value that can be used to adjust the mpg value to be more accurate (set to 0 to ignore)
 MPH_CALIBRATE = 0.000 # this is to be a value that can be used to adjust the mph value to be more accurate (set to 0 to ignore)
