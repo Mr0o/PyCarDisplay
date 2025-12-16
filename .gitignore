@@ -7,3 +7,6 @@ __pycache__/
 
 # ignore vscode folder
 .vscode/
+
+# ignore virtual environment folder
+env/
