@@ -45,6 +45,7 @@ def connectOBD():
     c.watch(obd.commands.DISTANCE_SINCE_DTC_CLEAR)
     c.watch(obd.commands.RELATIVE_THROTTLE_POS)
     c.watch(obd.commands.RUN_TIME)
+    c.watch(obd.commands.FUEL_LEVEL)
 
     c.start() # start the async update loop
         
@@ -185,3 +186,14 @@ def get_MPG_GPH_INSTANTANEOUS(command: obd.Async, pedal: int):
         mpg = 99
 
     return mpg, gph
+
+def get_FUEL_LEVEL(command: obd.Async):
+    # fuel level
+    cmd = command.query(obd.commands.FUEL_LEVEL) # send the command, and parse the response
+    if not cmd.is_null():
+        fuel_level = cmd.value.magnitude
+    else:
+        fuel_level = -1
+        print ("FUEL_LEVEL is null")
+
+    return fuel_level
