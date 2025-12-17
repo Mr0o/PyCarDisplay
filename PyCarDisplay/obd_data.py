@@ -189,7 +189,7 @@ def get_MPG_GPH_INSTANTANEOUS(command: obd.Async, pedal: int):
 
 def get_FUEL_LEVEL(command: obd.Async):
     # fuel level
-    cmd = command.query(obd.commands.FUEL_LEVEL) # send the command, and parse the response
+    cmd = command.query(obd.commands['FUEL_LEVEL']) # send the command, and parse the response
     if not cmd.is_null():
         fuel_level = cmd.value.magnitude
     else:
