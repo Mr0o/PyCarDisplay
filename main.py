@@ -90,7 +90,7 @@ while(True):
                 lcdSmall.clear()
         
         ## Update the LCD ##
-        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed, fuel_level)
+        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed, fuel_level, None)
 
     except Exception as e:
         """
