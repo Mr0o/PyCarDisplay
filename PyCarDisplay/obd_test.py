@@ -24,6 +24,7 @@ class commandsList:
         self.DISTANCE_SINCE_DTC_CLEAR = 7
         self.RELATIVE_THROTTLE_POS = 8
         self.RUN_TIME = 9
+        self.FUEL_LEVEL = 10
     
 commands = commandsList()
 
