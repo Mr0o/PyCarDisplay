@@ -59,11 +59,11 @@ def getTempGauge(t) -> str:
 
     return temp_bar
 
-def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed) -> str:
+def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed, fuel_level, fuel_level_gallons) -> str:
     ### print to LCD ###
     if not USE_METRIC:
         lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
-        lcdSmall.text("Eng: " + getTempGauge(engine_temp), 2) 
+        lcdSmall.text("Fuel Level: " + str(fuel_level) + "%", 2)
 
         space = ""
         if round(mpg_display) < 10: 
@@ -108,7 +108,7 @@ def LCD_Idle():
     if not USE_METRIC:
         # print blank values to the LCD while we wait a few seconds for the obd data to load (obd is asynchronous, it will run during the sleep command)
         lcdSmall.text("Outside: --" +chr(223)+"F", 1)
-        lcdSmall.text("Eng: " + getTempGauge(130), 2)
+        lcdSmall.text("Fuel Level: --%", 2)
 
         lcdBig.text("MPG: --  Gph: --", 1)
         lcdBig.text("                    ", 2)

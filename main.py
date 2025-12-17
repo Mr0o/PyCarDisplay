@@ -4,7 +4,7 @@ from PyCarDisplay.display import lcdBig, lcdSmall, LCD_Clear, LCD_Update, LCD_Er
 from PyCarDisplay.obd_data import connectOBD
 from PyCarDisplay.obd_data import get_AMBIANT_AIR_TEMP, get_COOLANT_TEMP
 from PyCarDisplay.obd_data import get_RELATIVE_THROTTLE_POS, get_DISTANCE_SINCE_DTC_CLEAR
-from PyCarDisplay.obd_data import get_RUN_TIME, get_MPG_GPH_INSTANTANEOUS
+from PyCarDisplay.obd_data import get_RUN_TIME, get_MPG_GPH_INSTANTANEOUS, get_FUEL_LEVEL
 
 try:
     connection = connectOBD() # initial connection is made
@@ -39,6 +39,7 @@ while(True):
         pedal = get_RELATIVE_THROTTLE_POS(connection)
         dtc_miles = get_DISTANCE_SINCE_DTC_CLEAR(connection)
         time_elapsed = get_RUN_TIME(connection)
+        fuel_level = get_FUEL_LEVEL(connection)
 
         # get the elapsed miles this trip
         miles_elapsed = dtc_miles - start_miles
@@ -89,7 +90,7 @@ while(True):
                 lcdSmall.clear()
         
         ## Update the LCD ##
-        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed)
+        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed, fuel_level)
 
     except Exception as e:
         """
