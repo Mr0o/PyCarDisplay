@@ -45,7 +45,7 @@ def connectOBD():
     c.watch(obd.commands.DISTANCE_SINCE_DTC_CLEAR)
     c.watch(obd.commands.RELATIVE_THROTTLE_POS)
     c.watch(obd.commands.RUN_TIME)
-    c.watch(obd.commands.FUEL_LEVEL)
+    c.watch(obd.commands['FUEL_LEVEL'])
 
     c.start() # start the async update loop
         
