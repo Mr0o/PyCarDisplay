@@ -6,6 +6,9 @@ LCD_BIG_ADDR   = 0x26 # I2C address of big LCD (20x4)
 USE_METRIC = False
 # note: this will not apply to the values recorded in the log
 
+# Size of tank for MPG AVG calculation
+FUEL_TANK_SIZE_GALLONS = 18.0 # size of fuel tank in gallons
+
 ### USER DEFINED CALIBRATION OFFSET ###
 # adjustment goes like this: actual
 MPG_CALIBRATE = 0.000 # this is to be a value that can be used to adjust the mpg value to be more accurate (set to 0 to ignore)
