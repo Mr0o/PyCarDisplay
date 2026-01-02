@@ -109,8 +109,8 @@ def LCD_Error_Msg(msg: str):
 def LCD_Idle():
     if not USE_METRIC:
         # print blank values to the LCD while we wait a few seconds for the obd data to load (obd is asynchronous, it will run during the sleep command)
-        lcdSmall.text("Outside: --" +chr(223)+"F", 1)
-        lcdSmall.text("Fuel Level: --%", 2)
+        lcdSmall.text("Engine Load: --%", 1)
+        lcdSmall.text("Battery: --.-V", 2)
 
         lcdBig.text("MPG: --  Gph: --", 1)
         lcdBig.text("                    ", 2)
@@ -120,8 +120,8 @@ def LCD_Idle():
     # METRIC
     else:
         # print blank values to the LCD while we wait a few seconds for the obd data to load (obd is asynchronous, it will run during the sleep command)
-        lcdSmall.text("Outside: --" +chr(223)+"C", 1)
-        lcdSmall.text("Eng: " + getTempGauge(130), 2)
+        lcdSmall.text("Engine Load: --%", 1)
+        lcdSmall.text("Battery: --.-V", 2)
 
         lcdBig.text("L/100km: -- L/h: -- ", 1)
         lcdBig.text("                    ", 2)
