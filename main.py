@@ -39,7 +39,6 @@ while(True):
         pedal = get_RELATIVE_THROTTLE_POS(connection)
         dtc_miles = get_DISTANCE_SINCE_DTC_CLEAR(connection)
         time_elapsed = get_RUN_TIME(connection)
-        fuel_level = get_FUEL_LEVEL(connection)
 
         # get the elapsed miles this trip
         miles_elapsed = dtc_miles - start_miles
