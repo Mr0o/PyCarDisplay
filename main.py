@@ -4,7 +4,7 @@ from PyCarDisplay.display import lcdBig, lcdSmall, LCD_Clear, LCD_Update, LCD_Er
 from PyCarDisplay.obd_data import connectOBD
 from PyCarDisplay.obd_data import get_AMBIANT_AIR_TEMP, get_COOLANT_TEMP
 from PyCarDisplay.obd_data import get_RELATIVE_THROTTLE_POS, get_DISTANCE_SINCE_DTC_CLEAR
-from PyCarDisplay.obd_data import get_RUN_TIME, get_MPG_GPH_INSTANTANEOUS, get_FUEL_LEVEL
+from PyCarDisplay.obd_data import get_RUN_TIME, get_MPG_GPH_INSTANTANEOUS
 
 try:
     connection = connectOBD() # initial connection is made
@@ -90,7 +90,7 @@ while(True):
                 lcdSmall.clear()
         
         ## Update the LCD ##
-        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed, fuel_level, None)
+        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed)
 
     except Exception as e:
         """

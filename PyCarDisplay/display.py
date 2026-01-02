@@ -59,11 +59,11 @@ def getTempGauge(t) -> str:
 
     return temp_bar
 
-def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed, fuel_level, fuel_level_gallons) -> str:
+def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed) -> str:
     ### print to LCD ###
     if not USE_METRIC:
         lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
-        lcdSmall.text("Fuel Level: " + str(fuel_level) + "%", 2)
+        lcdSmall.text("", 2)
 
         space = ""
         if round(mpg_display) < 10: 
