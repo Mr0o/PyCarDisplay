@@ -45,6 +45,7 @@ def connectOBD():
     c.watch(obd.commands.DISTANCE_SINCE_DTC_CLEAR)
     c.watch(obd.commands.RELATIVE_THROTTLE_POS)
     c.watch(obd.commands.RUN_TIME)
+    c.watch(obd.commands.ENGINE_LOAD)
     c.watch(obd.commands.ELM_VOLTAGE)
 
     c.start() # start the async update loop
