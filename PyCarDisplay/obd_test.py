@@ -25,6 +25,7 @@ class commandsList:
         self.RELATIVE_THROTTLE_POS = 8
         self.RUN_TIME = 9
         self.FUEL_LEVEL = 10
+        self.ELM_VOLTAGE = 11
     
 commands = commandsList()
 

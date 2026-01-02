@@ -45,6 +45,7 @@ def connectOBD():
     c.watch(obd.commands.DISTANCE_SINCE_DTC_CLEAR)
     c.watch(obd.commands.RELATIVE_THROTTLE_POS)
     c.watch(obd.commands.RUN_TIME)
+    c.watch(obd.commands.ELM_VOLTAGE)
 
     c.start() # start the async update loop
         
@@ -57,7 +58,7 @@ def get_DISTANCE_SINCE_DTC_CLEAR(command: obd.Async):
         miles_elapsed = cmd.value.magnitude
         miles_elapsed = miles_elapsed * 0.62137 #convert kilometers to miles
     else:
-        miles_elapsed = 0
+        miles_elapsed = -1
         print("DISTANCE_SINCE_DTC_CLEAR is null")
 
     return miles_elapsed 
@@ -70,7 +71,7 @@ def get_AMBIANT_AIR_TEMP(command: obd.Async):
         air_temp = cmd.value.magnitude
         air_temp = round(air_temp * 1.8 + 32.00) #convert celsius to fahrenheit
     else:
-        air_temp = "--"
+        air_temp = "??"
         print ("AMBIANT_AIR_TEMP is null")
     
     return air_temp
@@ -83,7 +84,7 @@ def get_COOLANT_TEMP(command: obd.Async):
         engine_temp = cmd.value.magnitude
         engine_temp = engine_temp * 1.8 + 32.00 #convert celsius to fahrenheit
     else:
-        engine_temp = 140
+        engine_temp = "??"
         print ("COOLANT_TEMP is null")
 
     return engine_temp
@@ -185,3 +186,23 @@ def get_MPG_GPH_INSTANTANEOUS(command: obd.Async, pedal: int):
         mpg = 99
 
     return mpg, gph
+
+def get_ELM_VOLTAGE(command: obd.Async):
+    cmd = command.query(obd.commands.ELM_VOLTAGE) # send the command, and parse the response
+    if not cmd.is_null():
+        voltage = cmd.value.magnitude
+    else:
+        voltage = 0.0
+        print ("ELM_VOLTAGE is null")
+
+    return voltage
+
+def get_ENGINE_LOAD(command: obd.Async):
+    cmd = command.query(obd.commands.ENGINE_LOAD) # send the command, and parse the response
+    if not cmd.is_null():
+        engine_load = cmd.value.magnitude
+    else:
+        engine_load = 0.0
+        print ("ENGINE_LOAD is null")
+
+    return engine_load

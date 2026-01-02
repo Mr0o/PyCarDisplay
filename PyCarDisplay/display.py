@@ -34,6 +34,8 @@ while(failed):
         sleep(1)
 
 def getTempGauge(t) -> str:
+    if t == "??":
+        return "_______ ?"
     # create temperature bar guage
     temp_bar = ""
     if t < COLD_ENGINE_MAX: # less than COLD_ENGINE_MAX, consider it a cold engine - "C"
@@ -59,11 +61,11 @@ def getTempGauge(t) -> str:
 
     return temp_bar
 
-def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed) -> str:
+def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elapsed, voltage, engine_load) -> str:
     ### print to LCD ###
     if not USE_METRIC:
-        lcdSmall.text("Outside: "+ str(air_temp) +chr(223)+"F", 1)
-        lcdSmall.text(getTempGauge(engine_temp), 2)
+        lcdSmall.text("Engine Load: " + str(round(engine_load)) + "%", 1)
+        lcdSmall.text("Battery: " + "{:.2f}".format(voltage) + "V", 2)
 
         space = ""
         if round(mpg_display) < 10: 
@@ -82,8 +84,8 @@ def LCD_Update(air_temp, engine_temp, mpg_display, gph, time_elapsed, miles_elap
         lkm_display = 235.2145 / mpg_display if mpg_display != 0 else 0
         lph = gph * 0.264172
                            
-        lcdSmall.text("Outside: "+ str(air_temp_c) +chr(223)+"C", 1)
-        lcdSmall.text("Eng: " + getTempGauge(engine_temp), 2) 
+        lcdSmall.text("Engine Load: " + str(round(engine_load)) + "%", 1)
+        lcdSmall.text("Battery: " + "{:.2f}".format(voltage) + "V", 2)
 
         space = ""
         if round(lkm_display) < 10: 

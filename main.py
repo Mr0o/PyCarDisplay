@@ -1,10 +1,12 @@
 from time import sleep
+import PyCarDisplay
 from PyCarDisplay.miles_logging import init_log, update_log, create_new_log, clean_csv_files
 from PyCarDisplay.display import lcdBig, lcdSmall, LCD_Clear, LCD_Update, LCD_Error_Msg, LCD_Idle
 from PyCarDisplay.obd_data import connectOBD
 from PyCarDisplay.obd_data import get_AMBIANT_AIR_TEMP, get_COOLANT_TEMP
 from PyCarDisplay.obd_data import get_RELATIVE_THROTTLE_POS, get_DISTANCE_SINCE_DTC_CLEAR
-from PyCarDisplay.obd_data import get_RUN_TIME, get_MPG_GPH_INSTANTANEOUS
+from PyCarDisplay.obd_data import get_RUN_TIME, get_MPG_GPH_INSTANTANEOUS, get_ELM_VOLTAGE
+from PyCarDisplay.obd_data import get_ENGINE_LOAD
 
 try:
     connection = connectOBD() # initial connection is made
@@ -22,7 +24,10 @@ LCD_Idle() # print idle values to the LCD
 sleep(2) 
 
 # gather the starting DTC mileage in order to calculate the trip distance
-start_miles = get_DISTANCE_SINCE_DTC_CLEAR(connection)
+try:
+    start_miles = get_DISTANCE_SINCE_DTC_CLEAR(connection)
+except:
+    start_miles = 0
 
 previous_time_elapsed = "-:--"
 
@@ -39,6 +44,8 @@ while(True):
         pedal = get_RELATIVE_THROTTLE_POS(connection)
         dtc_miles = get_DISTANCE_SINCE_DTC_CLEAR(connection)
         time_elapsed = get_RUN_TIME(connection)
+        voltage = get_ELM_VOLTAGE(connection)
+        engine_load = get_ENGINE_LOAD(connection)
 
         # get the elapsed miles this trip
         miles_elapsed = dtc_miles - start_miles
@@ -89,7 +96,7 @@ while(True):
                 lcdSmall.clear()
         
         ## Update the LCD ##
-        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed)
+        LCD_Update(air_temp, engine_temp, mpg, gph, time_elapsed, miles_elapsed, voltage, engine_load)
 
     except Exception as e:
         """
