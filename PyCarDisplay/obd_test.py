@@ -26,6 +26,7 @@ class commandsList:
         self.RUN_TIME = 9
         self.FUEL_LEVEL = 10
         self.ELM_VOLTAGE = 11
+        self.ENGINE_LOAD = 12
     
 commands = commandsList()
 
