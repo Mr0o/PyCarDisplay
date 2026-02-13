@@ -46,19 +46,23 @@ Here is the list of data that is currently displayed (elly branch):
     ```
     git clone https://github.com/Mr0o/PyCarDisplay.git
     ```
-3. Change to the PyCarDisplay directory:
+3. Change to the 'elly' branch:
+    ```
+    git checkout elly
+   ```
+4. Change to the PyCarDisplay directory:
     ```
     cd PyCarDisplay
    ```
-4. Run the install script to set up the environment and install dependencies:
+5. Run the install script to set up the environment and install dependencies:
     ```
     bash install.sh
     ```
-5. Reboot the Raspberry Pi to verify that it is working:
+6. Reboot the Raspberry Pi to verify that it is working:
     ```
     sudo reboot
     ```
-6. Done! Just make sure the LCDs are connected and the OBD2 cable is plugged in.
+7. Done! Just make sure the LCDs are connected and the OBD2 cable is plugged in.
 ## Set up PyCarDisplay (Manually)
 
 1. Open a terminal on the Raspberry Pi.
@@ -69,33 +73,37 @@ Here is the list of data that is currently displayed (elly branch):
    ```
     git clone https://github.com/Mr0o/PyCarDisplay.git
     ```
-3. Change to the PyCarDisplay directory:
+3. Change to the 'elly' branch:
+    ```
+    git checkout elly
+    ```
+4. Change to the PyCarDisplay directory:
     ```
     cd PyCarDisplay
     ```
-4. Create a Python virtual environment:
+5. Create a Python virtual environment:
     ```
     python3 -m venv env
     ```
-5. Activate the virtual environment:
+6. Activate the virtual environment:
     ```
     source env/bin/activate
     ```
-6. Install the required Python packages:
+7. Install the required Python packages:
     ```
     pip3 install -r requirements.txt
     ```
-7. Make the run.sh script executable:
+8. Make the run.sh script executable:
     ```
     chmod +x run.sh
     ```
-8. Set up the script to run on startup by adding it to .bashrc:
+9. Set up the script to run on startup by adding it to .bashrc:
     ```
     echo "bash /home/$USER/Desktop/PyCarDisplay/run.sh &" >> ~/.bashrc
     ```
      > <i>It should be noted that modifying .bashrc will cause the script to run every time a terminal is opened. If this is not desired, consider using other methods to run the script on startup, such as cron jobs or systemd services. </i>
-9. Reboot the Raspberry Pi to test the setup:
+10. Reboot the Raspberry Pi to test the setup:
     ```
     sudo reboot
     ```
-10. After rebooting, the PyCarDisplay script should start automatically, and you should see data on the LCD displays once connected to the car's OBD2 port.
+11. After rebooting, the PyCarDisplay script should start automatically, and you should see data on the LCD displays once connected to the car's OBD2 port.
